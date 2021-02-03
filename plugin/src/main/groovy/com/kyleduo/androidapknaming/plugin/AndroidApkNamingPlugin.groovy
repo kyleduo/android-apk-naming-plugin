@@ -1,6 +1,7 @@
 package com.kyleduo.androidapknaming.plugin
 
 import com.android.build.gradle.AppExtension
+import com.android.build.gradle.api.ApkVariantOutput
 import com.android.build.gradle.api.ApplicationVariant
 import org.apache.velocity.VelocityContext
 import org.apache.velocity.app.Velocity
@@ -19,7 +20,6 @@ class AndroidApkNamingPlugin implements Plugin<Project> {
 
         def appExtension = project.extensions.findByType(AppExtension.class)
         project.afterEvaluate {
-
             if (config == null || config.template == null) {
                 throw new IllegalStateException("please config apkNaming.template first")
             }
@@ -55,6 +55,13 @@ class AndroidApkNamingPlugin implements Plugin<Project> {
         StringWriter nameWriter = new StringWriter()
         Velocity.evaluate(context, nameWriter, "renderName", template)
 
-        println(nameWriter.toString())
+        def newName = nameWriter.toString()
+        println(newName)
+
+        appVariant.outputs.each {
+            if (it instanceof ApkVariantOutput) {
+                it.outputFileName = newName
+            }
+        }
     }
 }

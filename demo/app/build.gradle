@@ -51,7 +51,6 @@ android {
             dimension "vendor"
         }
     }
-
 }
 
 apkNaming {
