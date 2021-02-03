@@ -31,6 +31,27 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    flavorDimensions "pay", "vendor"
+
+    productFlavors {
+        free {
+            dimension "pay"
+        }
+
+        paid {
+            dimension "pay"
+        }
+
+        google {
+            dimension "vendor"
+        }
+
+        amazon {
+            dimension "vendor"
+        }
+    }
+
 }
 
 dependencies {
