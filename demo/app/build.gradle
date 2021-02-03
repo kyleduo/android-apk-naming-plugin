@@ -54,6 +54,10 @@ android {
 
 }
 
+apkNaming {
+    template '$projectName-$versionCode-$versionName-$date(yyyy-MM-dd)-$flavorVendor-$flavorPay-$buildType-test-suffix'
+}
+
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

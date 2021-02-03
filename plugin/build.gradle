@@ -43,4 +43,5 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 
     implementation 'com.android.tools.build:gradle:4.1.0'
+    implementation 'org.apache.velocity:velocity-engine-core:2.2'
 }
