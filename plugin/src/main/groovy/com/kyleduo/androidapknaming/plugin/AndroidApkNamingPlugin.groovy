@@ -14,26 +14,43 @@ class AndroidApkNamingPlugin implements Plugin<Project> {
     Config config
     String template
     DateProcessor dateProcessor = new DateProcessor()
+    private Project project
+    private boolean hasCheckTemplate = false
 
     void apply(Project project) {
+        this.project = project
+
+        // init apkNaming extension
         config = project.extensions.create("apkNaming", Config.class)
 
-        def appExtension = project.extensions.findByType(AppExtension.class)
-        project.afterEvaluate {
-            if (config == null || config.template == null) {
-                throw new IllegalStateException("please config apkNaming.template first")
-            }
+        // init velocity
+        Velocity.init()
 
-            template = dateProcessor.process(config.template)
-            Velocity.init()
-
-            appExtension.applicationVariants.each {
-                handleAppVariant(project, it)
+        // config android gradle plugin, inject naming logic
+        def android = project.extensions.findByType(AppExtension)
+        android.applicationVariants.all { ApplicationVariant appVariant ->
+            if (!tryInitTemplate()) {
+                return
             }
+            handleAppVariant(appVariant)
         }
     }
 
-    private void handleAppVariant(Project project, ApplicationVariant appVariant) {
+    private boolean tryInitTemplate() {
+        if (hasCheckTemplate) {
+            return template != null
+        }
+        hasCheckTemplate = true
+        if (config == null || config.template == null) {
+            project.logger.lifecycle('`apkNaming.template` config not found, skip naming.')
+            return false
+        }
+        template = config.template
+        template = dateProcessor.process(template)
+        return true
+    }
+
+    private void handleAppVariant(ApplicationVariant appVariant) {
         def params = [
                 "projectName"  : project.name,
                 "versionCode"  : appVariant.versionCode,
@@ -48,6 +65,8 @@ class AndroidApkNamingPlugin implements Plugin<Project> {
             params.put("flavor" + dimension, flavor.name)
         }
 
+        project.logger.debug("android-apk-naming params: $params")
+
         VelocityContext context = new VelocityContext()
         params.each { key, value ->
             context.put(key, value)
@@ -56,7 +75,11 @@ class AndroidApkNamingPlugin implements Plugin<Project> {
         Velocity.evaluate(context, nameWriter, "renderName", template)
 
         def newName = nameWriter.toString()
-        println(newName)
+        if (!newName.endsWith('.apk')) {
+            newName += '.apk'
+        }
+
+        project.logger.info("apk name changed: $newName")
 
         appVariant.outputs.each {
             if (it instanceof ApkVariantOutput) {
