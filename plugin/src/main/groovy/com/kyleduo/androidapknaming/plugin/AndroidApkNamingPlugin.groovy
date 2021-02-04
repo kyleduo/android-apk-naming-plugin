@@ -49,8 +49,8 @@ class AndroidApkNamingPlugin implements Plugin<Project> {
         }
 
         VelocityContext context = new VelocityContext()
-        for (key in params.keySet()) {
-            context.put(key, params.get(key))
+        params.each { key, value ->
+            context.put(key, value)
         }
         StringWriter nameWriter = new StringWriter()
         Velocity.evaluate(context, nameWriter, "renderName", template)
