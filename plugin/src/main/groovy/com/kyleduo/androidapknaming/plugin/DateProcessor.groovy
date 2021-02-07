@@ -9,7 +9,7 @@ class DateProcessor {
             return null
         }
 
-        def pattern = ~'\\$date\\([^\\(\\)]+\\)'
+        def pattern = ~'\\$date\\([^()]+\\)'
         def matcher = pattern.matcher(template)
         def rangeItems = new ArrayList<DateRange>()
         while (matcher.find()) {
