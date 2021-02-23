@@ -14,8 +14,10 @@ class AndroidApkNamingPlugin implements Plugin<Project> {
     Config config
     String template
     DateProcessor dateProcessor = new DateProcessor()
+    GitInfoLoader gitInfoLoader = new GitInfoLoader()
     private Project project
     private boolean hasCheckTemplate = false
+    private GitInfo gitInfo
 
     void apply(Project project) {
         this.project = project
@@ -26,6 +28,9 @@ class AndroidApkNamingPlugin implements Plugin<Project> {
         // init velocity
         Velocity.init()
 
+        // prepare git info
+        prepareGitInfo()
+
         // config android gradle plugin, inject naming logic
         def android = project.extensions.findByType(AppExtension)
         android.applicationVariants.all { ApplicationVariant appVariant ->
@@ -34,6 +39,10 @@ class AndroidApkNamingPlugin implements Plugin<Project> {
             }
             handleAppVariant(appVariant)
         }
+    }
+
+    private void prepareGitInfo() {
+        gitInfo = gitInfoLoader.loadGitInfo()
     }
 
     private boolean tryInitTemplate() {
@@ -63,6 +72,12 @@ class AndroidApkNamingPlugin implements Plugin<Project> {
             def dimension = flavor.dimension
             dimension = dimension.substring(0, 1).toUpperCase() + dimension.substring(1)
             params.put("flavor" + dimension, flavor.name)
+        }
+
+        if (gitInfo != null) {
+            params.put("gitUsername", gitInfo.username)
+            params.put("gitCommitId", gitInfo.commitId)
+            params.put("gitCommitIdShort", gitInfo.commitIdShort)
         }
 
         project.logger.debug("android-apk-naming params: $params")
