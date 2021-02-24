@@ -1,4 +1,4 @@
-package com.kyleduo.androidapknaming.plugin
+package com.kyleduo.androidapknaming.plugin.tools
 
 class GitInfoLoader {
 

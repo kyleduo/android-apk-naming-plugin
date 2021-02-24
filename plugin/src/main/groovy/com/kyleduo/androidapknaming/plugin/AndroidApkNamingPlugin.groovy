@@ -3,6 +3,9 @@ package com.kyleduo.androidapknaming.plugin
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.api.ApkVariantOutput
 import com.android.build.gradle.api.ApplicationVariant
+import com.kyleduo.androidapknaming.plugin.tools.DateTool
+import com.kyleduo.androidapknaming.plugin.tools.GitInfo
+import com.kyleduo.androidapknaming.plugin.tools.GitInfoLoader
 import org.apache.velocity.VelocityContext
 import org.apache.velocity.app.Velocity
 import org.gradle.api.Plugin
@@ -13,7 +16,6 @@ class AndroidApkNamingPlugin implements Plugin<Project> {
 
     Config config
     String template
-    DateProcessor dateProcessor = new DateProcessor()
     GitInfoLoader gitInfoLoader = new GitInfoLoader()
     private Project project
     private boolean hasCheckTemplate = false
@@ -55,7 +57,6 @@ class AndroidApkNamingPlugin implements Plugin<Project> {
             return false
         }
         template = config.template
-        template = dateProcessor.process(template)
         return true
     }
 
@@ -68,7 +69,8 @@ class AndroidApkNamingPlugin implements Plugin<Project> {
                 "buildType"       : appVariant.buildType.name,
                 "timestamp"       : System.currentTimeMillis().toString(),
                 "timestampSeconds": System.currentTimeSeconds().toString(),
-                "properties"      : project.properties
+                "properties"      : project.properties,
+                "date"            : new DateTool()
         ]
 
         def flavorMap = new HashMap<String, String>()
@@ -84,10 +86,7 @@ class AndroidApkNamingPlugin implements Plugin<Project> {
         params.put("flavor", flavorMap)
 
         if (gitInfo != null) {
-            params.put("gitUser", gitInfo.username)
-            params.put("gitCommitId", gitInfo.commitId)
-            params.put("gitCommitIdShort", gitInfo.commitIdShort)
-            params.put("gitBranch", gitInfo.branch)
+            params.put("git", gitInfo)
         }
 
         project.logger.debug("android-apk-naming params: $params")

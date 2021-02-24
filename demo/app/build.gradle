@@ -13,7 +13,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -54,7 +54,8 @@ android {
 }
 
 apkNaming {
-    template 'prefix-$properties["custom"]-$projectName-$versionCode-$versionName-$date(yyyy-MM-dd)-$flavor["pay"]-$flavor["vendor"]-$buildType-$gitUser-$gitCommitId-$gitCommitIdShort-$gitBranch-$timestamp-$timestampSeconds-suffix'
+//    template 'prefix-$properties["custom"]-$projectName-$versionCode-$versionName-$buildType-$date-$flavor["pay"]-$flavor["vendor"]-$git.user-$git.commitId-$git.commitIdShort-$git.branch-$date.timestamp-$date.timestampInSeconds()-suffix'
+    template 'apk_naming_demo-$versionName($versionCode)-$flavor["pay"]-$flavor["vendor"]-$buildType-$date-${git.branch}.apk'
 }
 
 dependencies {
