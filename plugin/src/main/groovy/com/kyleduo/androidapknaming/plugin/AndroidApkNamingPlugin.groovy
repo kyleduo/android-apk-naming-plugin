@@ -75,9 +75,10 @@ class AndroidApkNamingPlugin implements Plugin<Project> {
         }
 
         if (gitInfo != null) {
-            params.put("gitUsername", gitInfo.username)
+            params.put("gitUser", gitInfo.username)
             params.put("gitCommitId", gitInfo.commitId)
             params.put("gitCommitIdShort", gitInfo.commitIdShort)
+            params.put("gitBranch", gitInfo.branch)
         }
 
         project.logger.debug("android-apk-naming params: $params")

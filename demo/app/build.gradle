@@ -54,7 +54,7 @@ android {
 }
 
 apkNaming {
-    template '$projectName-$versionCode-$versionName-$date(yyyy-MM-dd)-$flavorVendor-$flavorPay-$buildType-test-suffix'
+    template '$projectName-$versionCode-$versionName-$date(yyyy-MM-dd)-$flavorVendor-$flavorPay-$buildType-$gitUser-$gitCommitId-$gitCommitIdShort-$gitBranch-test-suffix'
 }
 
 dependencies {

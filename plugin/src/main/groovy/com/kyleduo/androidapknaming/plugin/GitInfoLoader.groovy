@@ -7,11 +7,12 @@ class GitInfoLoader {
             return new GitInfo()
         }
 
-        def username = getUsername()
-        def commitId = getCommitId()
-        def commitIdShort = getCommitIdShort()
+        def username = getUsername().trim()
+        def commitId = getCommitId().trim()
+        def commitIdShort = getCommitIdShort().trim()
+        def branch = getBranch().trim().replace('/', '_')
 
-        return new GitInfo(username, commitId, commitIdShort)
+        return new GitInfo(username, commitId, commitIdShort, branch)
     }
 
     private boolean gitAvailable() {
@@ -28,6 +29,10 @@ class GitInfoLoader {
 
     private String getCommitIdShort() {
         return execute('git rev-parse --short HEAD').out
+    }
+
+    private String getBranch() {
+        return execute('git rev-parse --abbrev-ref HEAD').out
     }
 
     private Output execute(String command) {
