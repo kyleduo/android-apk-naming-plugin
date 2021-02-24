@@ -61,11 +61,13 @@ class AndroidApkNamingPlugin implements Plugin<Project> {
 
     private void handleAppVariant(ApplicationVariant appVariant) {
         def params = [
-                "projectName"  : project.name,
-                "versionCode"  : appVariant.versionCode,
-                "versionName"  : appVariant.versionName,
-                "applicationId": appVariant.applicationId,
-                "buildType"    : appVariant.buildType.name,
+                "projectName"     : project.name,
+                "versionCode"     : appVariant.versionCode,
+                "versionName"     : appVariant.versionName,
+                "applicationId"   : appVariant.applicationId,
+                "buildType"       : appVariant.buildType.name,
+                "timestamp"       : System.currentTimeMillis().toString(),
+                "timestampSeconds": System.currentTimeSeconds().toString(),
         ]
 
         for (flavor in appVariant.productFlavors) {
