@@ -71,11 +71,17 @@ class AndroidApkNamingPlugin implements Plugin<Project> {
                 "properties"      : project.properties
         ]
 
+        def flavorMap = new HashMap<String, String>()
         for (flavor in appVariant.productFlavors) {
             def dimension = flavor.dimension
-            dimension = dimension.substring(0, 1).toUpperCase() + dimension.substring(1)
-            params.put("flavor" + dimension, flavor.name)
+            if (dimension != null) {
+                flavorMap.put(dimension, flavor.name)
+            } else {
+                project.logger.error("dimension of flavor ${flavor.name} is null. ")
+                break
+            }
         }
+        params.put("flavor", flavorMap)
 
         if (gitInfo != null) {
             params.put("gitUser", gitInfo.username)

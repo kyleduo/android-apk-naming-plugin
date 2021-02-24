@@ -54,7 +54,7 @@ android {
 }
 
 apkNaming {
-    template 'prefix-$properties["custom"]-$projectName-$versionCode-$versionName-$date(yyyy-MM-dd)-$flavorVendor-$flavorPay-$buildType-$gitUser-$gitCommitId-$gitCommitIdShort-$gitBranch-$timestamp-$timestampSeconds-suffix'
+    template 'prefix-$properties["custom"]-$projectName-$versionCode-$versionName-$date(yyyy-MM-dd)-$flavor["pay"]-$flavor["vendor"]-$buildType-$gitUser-$gitCommitId-$gitCommitIdShort-$gitBranch-$timestamp-$timestampSeconds-suffix'
 }
 
 dependencies {
