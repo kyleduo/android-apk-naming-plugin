@@ -12,7 +12,7 @@ bintray {
     publications = ['publishPlugin']
     pkg {
         repo = POM_REPO
-        name = POM_USER
+        name = POM_NAME
         userOrg = POM_USER
         licenses = [POM_LICENSE]
         websiteUrl = POM_PRJ_URL
