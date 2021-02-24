@@ -53,8 +53,6 @@ android {
     }
 }
 
-println(project.properties)
-
 apkNaming {
     template 'prefix-$properties["custom"]-$projectName-$versionCode-$versionName-$date(yyyy-MM-dd)-$flavorVendor-$flavorPay-$buildType-$gitUser-$gitCommitId-$gitCommitIdShort-$gitBranch-$timestamp-$timestampSeconds-suffix'
 }
