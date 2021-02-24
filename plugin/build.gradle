@@ -5,8 +5,8 @@ plugins {
     id 'java-gradle-plugin'
 }
 
-group 'com.kyleduo.android-apk-naming'
-version '1.0.0-SNAPSHOT'
+group POM_GROUP
+version VERSION_NAME
 
 repositories {
     mavenCentral()
@@ -25,15 +25,63 @@ gradlePlugin {
     }
 }
 
+task sourcesJar(type: Jar, dependsOn: classes) {
+    //noinspection GrDeprecatedAPIUsage
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    //noinspection GrDeprecatedAPIUsage
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+def pomConfig = {
+    licenses {
+        license {
+            //noinspection GroovyAssignabilityCheck
+            name POM_LICENSE
+            url POM_LICENSE_URL
+            distribution POM_LICENSE_DISTRIBUTION
+        }
+    }
+    developers {
+        developer {
+            id POM_DEVELOPER
+            //noinspection GroovyAssignabilityCheck
+            name POM_DEVELOPER
+            email POM_DEVELOPER_EMAIL
+        }
+    }
+
+    scm {
+        url POM_SCM_URL
+    }
+}
+
 publishing {
     publications {
         //noinspection GroovyAssignabilityCheck
         publishPlugin(MavenPublication) {
-            groupId = project.group
             //noinspection GroovyAssignabilityCheck
-            artifactId = 'plugin'
-            version = project.version
             from components.java
+            //noinspection GroovyAssignabilityCheck
+            artifact sourcesJar
+            //noinspection GroovyAssignabilityCheck
+            artifact javadocJar
+
+            groupId = POM_GROUP
+            //noinspection GroovyAssignabilityCheck
+            artifactId = POM_ARTIFACT
+            version = VERSION_NAME
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', POM_DESC)
+                root.appendNode('name', POM_NAME)
+                root.appendNode('url', POM_PRJ_URL)
+                root.children().last() + pomConfig
+            }
         }
     }
 }
@@ -45,3 +93,5 @@ dependencies {
     implementation 'com.android.tools.build:gradle:4.1.0'
     implementation 'org.apache.velocity:velocity-engine-core:2.2'
 }
+
+apply from: rootProject.file('gradle/bintray-upload.gradle')
