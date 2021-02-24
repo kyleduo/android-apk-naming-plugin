@@ -68,6 +68,7 @@ class AndroidApkNamingPlugin implements Plugin<Project> {
                 "buildType"       : appVariant.buildType.name,
                 "timestamp"       : System.currentTimeMillis().toString(),
                 "timestampSeconds": System.currentTimeSeconds().toString(),
+                "properties"      : project.properties
         ]
 
         for (flavor in appVariant.productFlavors) {
