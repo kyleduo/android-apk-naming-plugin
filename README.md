@@ -2,6 +2,8 @@
 
 ![version](https://img.shields.io/badge/version-1.0.0-blue?style=flat)
 
+[中文README](./README_CN.md)
+
 Android Apk Naming Plugin is a Gradle plugin providing convenient way to rename Android .apk file.
 
 ## Download 
@@ -15,6 +17,14 @@ buildscript {
     dependencies {
         classpath "com.kyleduo.android-apk-naming:plugin:$latest_version"
     }
+}
+```
+
+Apply the plugin in build.gradle of Android application module.
+
+```groovy
+plugins {
+	id 'com.kyleduo.android-apk-naming'
 }
 ```
 
